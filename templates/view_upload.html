@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">{{ upload.original_filename }}</h1>
+<p class="page-subtitle">Uploaded on {{ upload.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+
+<div class="card header-card">
+  <h2>Exporter Name SUPPLY CHAIN MAP for Product #</h2>
+
+  <div class="header-grid">
+    <div>
+      <div class="header-label">Vendor Number</div>
+      <div class="header-value">{{ header.vendor_number }}</div>
+
+      <div class="header-label">Item</div>
+      <div class="header-value">{{ header.item }}</div>
+
+      <div class="header-label">Item Number</div>
+      <div class="header-value">{{ header.item_number }}</div>
+    </div>
+
+    <div>
+      <div class="header-label">Ship Date</div>
+      <div class="header-value">{{ header.ship_date }}</div>
+
+      <div class="header-label">PO Quantity</div>
+      <div class="header-value">{{ header.po_quantity }}</div>
+    </div>
+
+    <div>
+      <div class="header-label">Component Breakdown</div>
+      <table class="table compact">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>%</th>
+            <th>Origin</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in components %}
+          <tr>
+            <td>{{ c.name }}</td>
+            <td>{{ c.percent }}</td>
+            <td>{{ c.origin }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<h2 class="section-title">Supply Chain Flow Diagram</h2>
+
+<div class="card">
+  <div class="flow-container">
+    {% for n in nodes %}
+      <div class="node-card">
+        <div class="node-material">{{ n.material }}</div>
+        <div class="node-group">{{ n.group }}</div>
+
+        {% if n.company_type %}
+          <div class="node-label">Company Type</div>
+          <div class="node-text">{{ n.company_type }}</div>
+        {% endif %}
+
+        {% if n.company_name %}
+          <div class="node-label">Company Name</div>
+          <div class="node-text">{{ n.company_name }}</div>
+        {% endif %}
+
+        {% if n.location %}
+          <div class="node-label">Location</div>
+          <div class="node-text">{{ n.location }}</div>
+        {% endif %}
+
+        {% if n.date %}
+          <div class="node-label">Date</div>
+          <div class="node-text">{{ n.date }}</div>
+        {% endif %}
+
+        {% if n.quantity %}
+          <div class="node-label">Quantity</div>
+          <div class="node-text">{{ n.quantity }}</div>
+        {% endif %}
+
+        {% if n.remarks %}
+          <div class="node-label">Remarks</div>
+          <div class="node-text">{{ n.remarks }}</div>
+        {% endif %}
+
+        {% if n.documents %}
+          <div class="node-label">Documents</div>
+          <ul class="node-doc-list">
+            {% for d in n.documents %}
+              <li>{{ d }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      {% if not loop.last %}
+        <div class="node-arrow">➜</div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

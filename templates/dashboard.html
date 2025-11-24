@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">Dashboard</h1>
+<p class="page-subtitle">Digitize your supply chain map and get more out of your data.</p>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Total Uploads</div>
+    <div class="stat-value">{{ total }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Completed</div>
+    <div class="stat-value">{{ completed }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Failed</div>
+    <div class="stat-value">{{ failed }}</div>
+  </div>
+</div>
+
+<div class="section-header">
+  <h2>Recent Uploads</h2>
+  <a href="{{ url_for('upload') }}" class="btn-primary">Upload New Map</a>
+</div>
+
+<div class="card">
+  {% if uploads %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>File</th>
+          <th>Uploaded At</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in uploads %}
+        <tr>
+          <td>{{ u.original_filename }}</td>
+          <td>{{ u.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td>
+            {% if u.status == 'completed' %}
+              <span class="badge badge-success">Completed</span>
+            {% elif u.status == 'failed' %}
+              <span class="badge badge-danger">Failed</span>
+            {% else %}
+              <span class="badge badge-muted">{{ u.status }}</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if u.status == 'completed' %}
+              <a href="{{ url_for('view_upload', upload_id=u.id) }}" class="link">View</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No uploads yet. <a href="{{ url_for('upload') }}">Upload your first map.</a></p>
+  {% endif %}
+</div>
+{% endblock %}

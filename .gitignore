@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env
+.venv/
+venv/
+
+# Local files
+uploads/*
+.env
+*.db
