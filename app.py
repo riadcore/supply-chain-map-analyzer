@@ -388,7 +388,14 @@ def init_db():
     print("Database initialized.")
 
 
+import os
+
 if __name__ == "__main__":
+    # Railway gives us the port in the PORT environment variable
+    port = int(os.environ.get("PORT", 5000))
+
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+
+    app.run(host="0.0.0.0", port=port, debug=False)
+
