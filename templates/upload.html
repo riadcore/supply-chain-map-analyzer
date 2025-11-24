@@ -6,13 +6,16 @@
 
     <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data" class="p-4 shadow-sm rounded bg-white">
 
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="file" class="form-label fw-bold">Select Excel File</label>
             <input type="file" name="file" id="file" class="form-control" required>
         </div>
-
-        <button type="submit" class="btn btn-primary">Upload & Process</button>
-        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+        
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary me-2">Upload & Process</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+        
     </form>
 </div>
 
