@@ -11,14 +11,12 @@
             <input type="file" name="file" id="file" class="form-control" required>
         </div>
         
-        <!-- Add vertical space after file input -->
-        <div class="my-4"></div>
-
-        <!-- Button group with large horizontal spacing -->
-        <div class="d-flex" style="gap: 40px;">
+        <!-- Buttons with strong vertical + horizontal spacing -->
+        <div class="d-flex" style="margin-top: 40px; gap: 40px;">
             <button type="submit" class="btn btn-primary">Upload & Process</button>
             <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
         </div>
+        
 
     </form>
 </div>
