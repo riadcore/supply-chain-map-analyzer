@@ -62,19 +62,32 @@ class Upload(db.Model):
 # Auth helpers
 # -------------------------
 
+def current_user():
+    """Return the logged-in user object or None.
+
+    Also cleans up session if the user no longer exists (e.g., new DB).
+    """
+    user_id = session.get("user_id")
+    if not user_id:
+        return None
+
+    # Use SQLAlchemy 2.0 style get()
+    user = db.session.get(User, user_id)
+    if user is None:
+        # Stale session cookie pointing to a non-existent user
+        session.pop("user_id", None)
+    return user
+
+
 def login_required(view_func):
     @wraps(view_func)
     def wrapper(*args, **kwargs):
-        if "user_id" not in session:
+        user = current_user()
+        if user is None:
             return redirect(url_for("login"))
         return view_func(*args, **kwargs)
     return wrapper
 
-
-def current_user():
-    if "user_id" not in session:
-        return None
-    return User.query.get(session["user_id"])
 
 
 # -------------------------
