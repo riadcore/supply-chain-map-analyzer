@@ -9,11 +9,10 @@
   <header class="top-nav">
     <div class="brand">Supply Chain Map Analyzer</div>
     <nav>
-      {% if session.get('user_id') %}
-        <a href="{{ url_for('dashboard') }}">Dashboard</a>
-        <a href="{{ url_for('upload') }}">Upload</a>
-        <a href="{{ url_for('logout') }}">Sign Out</a>
-      {% endif %}
+      <!-- Navigation always visible; authentication temporarily disabled -->
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('upload') }}">Upload</a>
+      <!-- <a href="{{ url_for('logout') }}">Sign Out</a> -->
     </nav>
   </header>
 

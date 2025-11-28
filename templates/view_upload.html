@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="page-title">{{ upload.original_filename }}</h1>
-<p class="page-subtitle">Uploaded on {{ upload.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
 
+<h1 class="page-title">{{ upload.original_filename }}</h1>
+<p class="page-subtitle">
+  Uploaded on {{ upload.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+</p>
+
+<!-- ================= HEADER CARD ================= -->
 <div class="card header-card">
   <h2>Exporter Name SUPPLY CHAIN MAP for Product #</h2>
 
@@ -50,29 +54,28 @@
   </div>
 </div>
 
+<!-- ================= FLOW DIAGRAM ================= -->
 <h2 class="section-title">Supply Chain Flow Diagram</h2>
 
 <div class="card">
   <div class="flow-container">
     {% for n in nodes %}
       <div class="node-card">
+
         <div class="node-material">{{ n.material }}</div>
         <div class="node-group">{{ n.group }}</div>
 
-        {% if n.company_type %}
-          <div class="node-label">Company Type</div>
-          <div class="node-text">{{ n.company_type }}</div>
-        {% endif %}
+        <!-- LEFT BOX -->
+        <div class="node-label">{{ n.left_type }}</div>
+        <div class="node-text">{{ n.left_party }}</div>
 
-        {% if n.company_name %}
-          <div class="node-label">Company Name</div>
-          <div class="node-text">{{ n.company_name }}</div>
-        {% endif %}
+        <hr>
 
-        {% if n.location %}
-          <div class="node-label">Location</div>
-          <div class="node-text">{{ n.location }}</div>
-        {% endif %}
+        <!-- RIGHT BOX -->
+        <div class="node-label">{{ n.right_type }}</div>
+        <div class="node-text">{{ n.right_party }}</div>
+
+        <hr>
 
         {% if n.date %}
           <div class="node-label">Date</div>
@@ -84,11 +87,6 @@
           <div class="node-text">{{ n.quantity }}</div>
         {% endif %}
 
-        {% if n.remarks %}
-          <div class="node-label">Remarks</div>
-          <div class="node-text">{{ n.remarks }}</div>
-        {% endif %}
-
         {% if n.documents %}
           <div class="node-label">Documents</div>
           <ul class="node-doc-list">
@@ -97,6 +95,7 @@
             {% endfor %}
           </ul>
         {% endif %}
+
       </div>
 
       {% if not loop.last %}
@@ -105,4 +104,63 @@
     {% endfor %}
   </div>
 </div>
+
+<!-- ================= DETAIL GRID STYLES ================= -->
+<style>
+  /* Horizontal scroll row for detailed records */
+  .detail-grid {
+    display: flex;
+    flex-wrap: nowrap;      /* keep everything in one row */
+    gap: 24px;
+    overflow-x: auto;       /* horizontal scroll */
+    padding-bottom: 10px;
+  }
+
+  .detail-card {
+    flex: 0 0 350px;        /* fixed card width */
+  }
+</style>
+
+<!-- ================= DETAILED SUPPLY CHAIN RECORDS ================= -->
+<h2 class="section-title">Detailed Supply Chain Records</h2>
+
+{% if details %}
+  <div class="detail-grid">
+    {% for b in details %}
+      <div class="card detail-card" style="margin-top: 20px;">
+
+        <!-- Block type e.g. Ginner, Spinner, Fabric Maker -->
+        <h3>{{ b.type }}</h3>
+
+        {% if b.name %}
+          <p><strong>{{ b.name }}</strong></p>
+        {% endif %}
+
+        {% if b.location %}
+          <p>{{ b.location }}</p>
+        {% endif %}
+
+        <!-- RECORD TITLE (e.g. Ginner Production Records) -->
+        {% if b.doc_title %}
+          <div style="font-weight: bold; margin-top: 10px; margin-bottom: 5px;">
+            {{ b.doc_title }}
+          </div>
+        {% endif %}
+
+        <!-- DOCUMENT LIST -->
+        {% if b.documents %}
+          <ul>
+            {% for d in b.documents %}
+              <li>{{ d }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No additional detailed records.</p>
+{% endif %}
+
 {% endblock %}
