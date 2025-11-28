@@ -68,18 +68,31 @@ class Upload(db.Model):
 # -------------------------
 
 def login_required(view_func):
+    """
+    Authentication temporarily disabled:
+    this decorator now just calls the view directly.
+    """
     @wraps(view_func)
     def wrapper(*args, **kwargs):
-        #if "user_id" not in session:
-            #return redirect(url_for("login"))
         return view_func(*args, **kwargs)
     return wrapper
 
 
 def current_user():
-    if "user_id" not in session:
-        return None
-    return User.query.get(session["user_id"])
+    """
+    Single-user mode: always return a default demo user.
+    If none exists, create it.
+    """
+    user = User.query.first()
+    if user is None:
+        user = User(
+            email="demo@example.com",
+            password_hash=generate_password_hash("demo"),
+        )
+        db.session.add(user)
+        db.session.commit()
+    return user
+
 
 
 # -------------------------
